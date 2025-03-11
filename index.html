@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Battle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Quiz Battle</h1>
+    <div class="startSec">
+        <input type="text" placeholder="Enter Player 1 Name" id="player1name">
+        <input type="text" placeholder="Enter Player 2 Name" id="player2name">
+        <button type="submit" id="startGameBtn">START</button>
+    </div>
+    <div class="categorySelectionSec">
+        <select name="categoriesDropdown" id="categoriesDropdown" title="categoriesDropdown"></select>
+        <button type="submit" id="selectCategoryBtn">SELECT CATEGORY</button>
+    </div>
+    <div class="QuestionsSec">
+        <div id="question"></div>
+        <div class="options"></div>
+    </div>
+    <div class="FinalPageSec">
+        <button type="submit" id="endGameBtn">END GAME</button>
+        <button type="submit" id="anotherGameBtn">ANOTHER ROUND</button>
+    </div>
+    <div class="winnerSec">
+        <p id="#winnerText"></p>
+        <button type="submit" id="newGameBtn">NEW GAME</button>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
