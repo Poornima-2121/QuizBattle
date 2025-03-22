@@ -5,10 +5,14 @@ let players = [
 let categoryPage = document.querySelector(".categorySelectionSec");
 let startPage = document.querySelector(".startSec");
 let QuestionsPage = document.querySelector(".QuestionsSec");
-let FinalPage = document.querySelector(".FinalPageSec")
+let FinalPage = document.querySelector(".FinalPageSec");
 let startGameBtn = document.getElementById("startGameBtn");
 let dropdown = document.getElementById("categoriesDropdown");
-let selectCategoryBtn = document.getElementById("selectCategoryBtn")
+let selectCategoryBtn = document.getElementById("selectCategoryBtn");
+let questionEl = document.getElementById("question");
+let optionsEl = document.querySelector(".options");
+let turnEl = document.getElementById("turn");
+let scoresEl = document.getElementById("scores")
 let API = "https://the-trivia-api.com/v2/";
 let categories = []
 let questionNo=0
@@ -88,22 +92,31 @@ function displayQuestions(Questions){
 }
 
 function questionDisplay(questionData){
-    let questionEl = document.getElementById("question");
-    let optionsEl = document.querySelector(".options");
-    questionEl.textContent = "";
     optionsEl.textContent = "";
-    questionEl.textContent += questionData.question.text;
-    correctAnswer = questionData.correctAnswer
-    difficulty = questionData.difficulty
-    let allAnswers = [questionData.correctAnswer,...questionData.incorrectAnswers]
-    let shuffledAnswers = shuffleArray(allAnswers.slice())
+    turnDisplay();
+    scoreDisplay();
+    questionEl.textContent = questionData.question.text;
+    correctAnswer = questionData.correctAnswer;
+    difficulty = questionData.difficulty;
+    let allAnswers = [questionData.correctAnswer,...questionData.incorrectAnswers];
+    let shuffledAnswers = shuffleArray(allAnswers.slice());
     shuffledAnswers.forEach((answer)=>{
         const button = document.createElement("button");
-        button.textContent = answer
-        button.value = answer
+        button.textContent = answer;
+        button.value = answer;
         button.className = "option";
-        optionsEl.appendChild(button) 
+        optionsEl.appendChild(button); 
     })
+}
+
+function turnDisplay(){
+    questionNo%2==0?turn.textContent = `${players.player1Name}'s Turn`
+    :turn.textContent = `${players.player2Name}'s Turn`;
+}
+
+function scoreDisplay(){
+    scoresEl.innerHTML = `<h3>${players.player1Name}:${players.player1Score}</h3>
+                          <h3>${players.player2Name}:${players.player2Score}</h3>`;
 }
 
 function shuffleArray(array){
