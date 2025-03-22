@@ -1,24 +1,38 @@
-let player1Name = "";
-let player2Name = "";
+let players = [
+    {player1Name:"",player1Score:0},
+    {player2Name:"",player2Score:0}
+]
 let categoryPage = document.querySelector(".categorySelectionSec");
 let startPage = document.querySelector(".startSec");
 let QuestionsPage = document.querySelector(".QuestionsSec");
+let FinalPage = document.querySelector(".FinalPageSec")
 let startGameBtn = document.getElementById("startGameBtn");
 let dropdown = document.getElementById("categoriesDropdown");
 let selectCategoryBtn = document.getElementById("selectCategoryBtn")
 let API = "https://the-trivia-api.com/v2/";
 let categories = []
 let questionNo=0
+let Questions=[]
+let correctAnswer = "";
+let difficulty = ""
 
 
 startGameBtn.addEventListener('click',startGame);
 selectCategoryBtn.addEventListener('click',selectCategory)
-
+document.querySelectorAll(".options").forEach((item)=>{
+    item.addEventListener('click', () => {
+        checkAnswer(event.target.value);
+        questionNo++;
+        displayQuestions(Questions)
+    })
+})
 
 function startGame(){
-    player1Name = document.getElementById("player1name").value;
-    player2Name = document.getElementById("player2name").value;
-    if(player1Name==="" || player2Name===""){
+    players.player1Score=0;
+    players.player2Score=0;
+    players.player1Name = document.getElementById("player1name").value;
+    players.player2Name = document.getElementById("player2name").value;
+    if(players.player1Name==="" || players.player2Name===""){
         alert("Enter Player Names");
     }
     else{
@@ -53,7 +67,7 @@ function selectCategory(){
 }
 
 async function getQuestions(selectedCategory) {
-    let Questions=[]
+    Questions = []
     let difficuties = ["easy","medium","hard"];
     for (let difficulty of difficuties){
         let url = `${API}questions?categories=${selectedCategory}&difficulties=${difficulty}&limit=2`;
@@ -65,24 +79,32 @@ async function getQuestions(selectedCategory) {
 }
 
 function displayQuestions(Questions){
-    questionDisplay(Questions[questionNo])
+    if(questionNo<Questions.length){
+        questionDisplay(Questions[questionNo]);
+    } else {
+        QuestionsPage.style.display = "none";
+        FinalPage.style.display = "block";
+    }
 }
 
 function questionDisplay(questionData){
     let questionEl = document.getElementById("question");
     let optionsEl = document.querySelector(".options");
+    questionEl.textContent = "";
+    optionsEl.textContent = "";
     questionEl.textContent += questionData.question.text;
-    let correctAnswer = questionData.correctAnswer
+    correctAnswer = questionData.correctAnswer
+    difficulty = questionData.difficulty
     let allAnswers = [questionData.correctAnswer,...questionData.incorrectAnswers]
     let shuffledAnswers = shuffleArray(allAnswers.slice())
     shuffledAnswers.forEach((answer)=>{
         const button = document.createElement("button");
         button.textContent = answer
         button.value = answer
+        button.className = "option";
         optionsEl.appendChild(button) 
     })
 }
-
 
 function shuffleArray(array){
     for(let i=array.length-1;i>0;i--){
@@ -90,4 +112,22 @@ function shuffleArray(array){
         [array[i],array[j]] = [array[j],array[i]]
     }
     return array
+}
+
+function checkAnswer(answeredChoice){
+    let score = 0;
+    if(difficulty==="easy"){
+        score=10;
+    }else if(difficulty==="medium"){
+        score=15;
+    }else{
+        score=20;
+    }
+    if(answeredChoice==correctAnswer){
+        if(questionNo%2==0){
+            players.player1Score+=score;
+        }else{
+            players.player2Score+=score;
+        }
+    }
 }
