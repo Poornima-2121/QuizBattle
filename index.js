@@ -6,23 +6,30 @@ let categoryPage = document.querySelector(".categorySelectionSec");
 let startPage = document.querySelector(".startSec");
 let QuestionsPage = document.querySelector(".QuestionsSec");
 let FinalPage = document.querySelector(".FinalPageSec");
+let winnerPage = document.querySelector(".winnerSec");
 let startGameBtn = document.getElementById("startGameBtn");
+let endGameBtn = document.getElementById("endGameBtn");
+let anotherRoundBtn = document.getElementById("anotherGameBtn");
+let newGameBtn = document.getElementById("newGameBtn");
 let dropdown = document.getElementById("categoriesDropdown");
 let selectCategoryBtn = document.getElementById("selectCategoryBtn");
 let questionEl = document.getElementById("question");
 let optionsEl = document.querySelector(".options");
 let turnEl = document.getElementById("turn");
-let scoresEl = document.getElementById("scores")
+let scoresEl = document.getElementById("scores");
 let API = "https://the-trivia-api.com/v2/";
-let categories = []
-let questionNo=0
-let Questions=[]
+let categories = [];
+let questionNo=0;
+let Questions=[];
 let correctAnswer = "";
-let difficulty = ""
+let difficulty = "";
 
 
 startGameBtn.addEventListener('click',startGame);
-selectCategoryBtn.addEventListener('click',selectCategory)
+selectCategoryBtn.addEventListener('click',selectCategory);
+endGameBtn.addEventListener('click', endGame);
+newGameBtn.addEventListener('click',newGame);
+
 document.querySelectorAll(".options").forEach((item)=>{
     item.addEventListener('click', () => {
         checkAnswer(event.target.value);
@@ -79,7 +86,7 @@ async function getQuestions(selectedCategory) {
         let data = await response.json();
         Questions.push(...data)
     }
-    displayQuestions(Questions)
+    displayQuestions(Questions);
 }
 
 function displayQuestions(Questions){
@@ -143,4 +150,26 @@ function checkAnswer(answeredChoice){
             players.player2Score+=score;
         }
     }
+}
+
+function endGame(){
+    let winnerText = document.getElementById("winnerText");
+    winnerText.textContent = "";
+    FinalPage.style.display="none";
+    winnerPage.style.display="block";
+    if(players.player1Score > players.player2Score){
+        winnerText.textContent = `${players.player1Name} wins!!`
+    } else if(players.player1Score < players.player2Score){
+        winnerText.textContent = `${players.player2Name} wins!!`
+    } else{
+        winnerText.textContent = `Its a Draw!!`
+    }
+}
+
+function newGame(){
+    winnerPage.style.display="none";
+    document.getElementById("player1name").value = "";
+    document.getElementById("player2name").value = "";
+    questionNo = 0;
+    startPage.style.display="block";
 }
