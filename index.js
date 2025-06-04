@@ -29,6 +29,7 @@ startGameBtn.addEventListener('click',startGame);
 selectCategoryBtn.addEventListener('click',selectCategory);
 endGameBtn.addEventListener('click', endGame);
 newGameBtn.addEventListener('click',newGame);
+anotherRoundBtn.addEventListener('click',anotherRound);
 
 document.querySelectorAll(".options").forEach((item)=>{
     item.addEventListener('click', () => {
@@ -71,10 +72,14 @@ function selectCategory(){
     categoryPage.style.display = "none";
     QuestionsPage.style.display = "block";
     let selectedCategory = dropdown.value;
+    index = categories.indexOf(selectedCategory);
+    if(index!=-1){
+        categories.splice(index,1);
+    }
     selectedCategory = selectedCategory.toLowerCase();
     selectedCategory = selectedCategory.replaceAll(" " , "_");
-    selectedCategory = selectedCategory.replaceAll("&","and")
-    getQuestions(selectedCategory)
+    selectedCategory = selectedCategory.replaceAll("&","and");
+    getQuestions(selectedCategory);
 }
 
 async function getQuestions(selectedCategory) {
@@ -93,9 +98,15 @@ function displayQuestions(Questions){
     if(questionNo<Questions.length){
         questionDisplay(Questions[questionNo]);
     } else {
-        QuestionsPage.style.display = "none";
-        FinalPage.style.display = "block";
-    }
+        if(categories.length==0){
+            QuestionsPage.style.display = "none";
+            endGame();
+        } else{
+            QuestionsPage.style.display = "none";
+            FinalPage.style.display = "block";
+        }
+        
+    } 
 }
 
 function questionDisplay(questionData){
@@ -171,5 +182,16 @@ function newGame(){
     document.getElementById("player1name").value = "";
     document.getElementById("player2name").value = "";
     questionNo = 0;
+    questionEl.textContent = "";
+    optionsEl.textContent = "";
+    scoresEl.textContent = "";
+    turnEl.textContent = "";
     startPage.style.display="block";
+}
+
+function anotherRound(){
+    FinalPage.style.display="none";
+    questionNo=0;
+    categoryPage.style.display = "block";
+    displayCategories();
 }
