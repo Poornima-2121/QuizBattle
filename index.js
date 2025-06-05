@@ -168,6 +168,8 @@ function endGame(){
     winnerText.textContent = "";
     FinalPage.style.display="none";
     winnerPage.style.display="block";
+    document.getElementById("player1score").textContent = `${players.player1Name} scored ${players.player1Score}`;
+    document.getElementById("player2score").textContent = `${players.player2Name} scored ${players.player2Score}`;
     if(players.player1Score > players.player2Score){
         winnerText.textContent = `${players.player1Name} wins!!`
     } else if(players.player1Score < players.player2Score){
